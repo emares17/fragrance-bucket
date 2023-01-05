@@ -3,10 +3,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const dotenv = require('dotenv');
 const expressLayouts = require('express-ejs-layouts');
-const connectDB = require('./config/db');
 const mongoose = require('mongoose');
+const connectDB = require('./config/db');
 
-mongoose.set('strictQuery', false);
+mongoose.set('strictQuery', true);
 
 // Load Config
 dotenv.config({ path: './config/config.env'});
