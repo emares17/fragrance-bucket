@@ -31,7 +31,8 @@ router.post('/register', (req, res) => {
             password
         });
     } else {
-        res.send('Pass')
+        // If validation passed
+        
     }
 });
 
