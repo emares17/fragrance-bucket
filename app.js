@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
 const connectDB = require('./config/db');
+const flash = require('connect-flash');
+const session = require('express-session');
 
 mongoose.set('strictQuery', true);
 
@@ -20,6 +22,22 @@ app.set('view engine', 'EJS');
 
 // Bodyparser
 app.use(express.urlencoded({ extended: true}));
+
+// Sessions
+app.use(session({
+    secret: 'keyboard dog',
+    saveUninitialized: true,
+    resave: true
+}));
+
+// Flash
+app.use(flash());
+
+// Global
+// app.use((req, res) => {
+//     res.locals.success = req.flash('success');
+//     res.locals.error = req.flash('error');
+// })
 
 // Routes
 app.use('/', require('./routes/index.js'));
