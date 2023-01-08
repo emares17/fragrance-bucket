@@ -49,9 +49,12 @@ router.post('/register', (req, res) => {
                         name,
                         email,
                         password
+                    });
+                    bcrypt.genSalt(10, (err, hash) => {
+                        bcrypt.hash('B4c0/\/', salt, (err, hash) => {
+                            
+                        })
                     })
-                    console.log(newUser)
-                    res.send('Hello')
                 }
             });
     }
