@@ -19,10 +19,10 @@ app.use(expressLayouts);
 app.set('view engine', 'EJS');
 
 // Bodyparser
-app.use(express.urlencoded({ extended: false}));
+app.use(express.urlencoded({ extended: true}));
 
 // Routes
-app.use('/', require('./routes/index'));
-app.use('/users', require('./routes/user'));
+app.use('/', require('./routes/index.js'));
+app.use('/users', require('./routes/user.js'));
 
 app.listen(PORT, console.log(`Server has started on port ${PORT}`));
