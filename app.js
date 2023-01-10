@@ -7,11 +7,13 @@ const mongoose = require('mongoose');
 const connectDB = require('./config/db');
 const flash = require('connect-flash');
 const session = require('express-session');
+const passport = require('passport')
 
 mongoose.set('strictQuery', true);
 
 // Load Config
 dotenv.config({ path: './config/config.env'});
+require('./config/passport')(passport);
 
 // Connect to DB
 connectDB();
@@ -29,6 +31,10 @@ app.use(session({
     saveUninitialized: true,
     resave: true
 }));
+
+// Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Flash
 app.use(flash());
