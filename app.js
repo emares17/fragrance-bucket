@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const connectDB = require('./config/db');
 const flash = require('connect-flash');
 const session = require('express-session');
-const passport = require('passport')
+const passport = require('passport');
 
 mongoose.set('strictQuery', true);
 

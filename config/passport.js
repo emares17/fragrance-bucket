@@ -1,11 +1,10 @@
-const mongoose = require('mongoose');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
 module.exports = function(passport) {
     passport.use(
-        new LocalStrategy({ username: 'email' }, (email, password, done) => {
+        new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
             User.findOne({ email: email})
                 .then(user => {
                     if (!user) {
