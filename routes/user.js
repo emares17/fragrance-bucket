@@ -82,12 +82,9 @@ router.post('/login', (req, res, next) => {
 // Logout
 router.get('/logout', (req, res, next) => {
     req.logout(err => {
-        if (err) {
-            return next(err)
-        } else {
-            req.flash('success', 'You have successfully logged out');
-            res.redirect('/users/login');
-        }
+        if (err) return next(err)
+        req.flash('success', 'You have successfully logged out');
+        res.redirect('/users/login');
     });
 });
 
