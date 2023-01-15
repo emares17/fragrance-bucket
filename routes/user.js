@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+const Fragrance = require('../models/Fragrance');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 
@@ -21,6 +22,7 @@ router.post('/register', (req, res) => {
         errors.push({ msg: 'Please fill in all fields'});
     }
 
+    // Check passwords match
     if (password != password2) {
         errors.push({ msg: 'Passwords do not match'})
 

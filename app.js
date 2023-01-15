@@ -22,6 +22,7 @@ connectDB();
 app.use(expressLayouts);
 app.set('view engine', 'EJS');
 
+
 // Bodyparser
 app.use(express.urlencoded({ extended: true}));
 
@@ -49,5 +50,6 @@ app.use((req, res, next) => {
 // Routes
 app.use('/', require('./routes/index.js'));
 app.use('/users', require('./routes/user.js'));
+app.use('/fragrance', require('./routes/fragrance.js'));
 
 app.listen(PORT, console.log(`Server has started on port ${PORT}`));
