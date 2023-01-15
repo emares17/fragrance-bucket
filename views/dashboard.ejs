@@ -1,5 +1,5 @@
 <h1 class="mt-4">Dashboard</h1>
-<p class="lead mb-3">Welcome</p>
+<p class="lead mb-3">Welcome <%= name %> </p>
 <a href="/users/logout" class="btn btn-secondary">Logout</a>
 
 <div class="container py-5">
@@ -30,6 +30,32 @@
     </div>
   </div>
 
+  <p>Here are your posts</p>
+  <% if(fragrance.length) { %>
+      <table class="striped">
+          <thead>
+              <tr>
+                  <th>Title</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th></th>
+              </tr>
+          </thead>
+          <tbody>
+              <% for(let i = 0; i < fragrance.length; i++) { %>
+                  <tr>
+                      <td><a href='/fragrance/<%= fragrance[i]._id %>'><%= fragrance[i].title %></a></td>
+                      <td><%= fragrance[i].date %></td>
+                      <td><span class="dash-status"><%= fragrance[i].status %></span></td>
+                      <td></td>
+                  </tr>
+              <% } %>
+          </tbody>
+      </table>
+  <% } else { %>
+      <p>You have not created any stories</p>
+  <% } %>
+  
 
   <div class="fixed-action-btn">
     <a href="/fragrance/add" class="btn-floating btn-large waves-effect waves-light red"><i class="fas fa-plus"></i></a>
