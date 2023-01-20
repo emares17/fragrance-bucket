@@ -1,34 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const { ensureAuth } = require('../middleware/auth');
-const Fragrance = require('../models/Fragrance');
+const { addPage, createPost, getAll } = require('../controllers/fragrance');
 
 // Get add page
-router.get('/add', ensureAuth,(req, res) => res.render('add'));
+router.get('/add', ensureAuth,addPage);
 
-// Create post
-router.post('/', ensureAuth, (req, res) => {
-    req.body.user = req.user.id;
-    Fragrance.create(req.body)
-    .then(() => {
-        res.redirect('/dashboard');
-    })
-    .catch((err) => {
-        console.log(err);
-    });
-});
+// Create a post
+router.post('/', ensureAuth,createPost);
 
-// Show all post to dashboard
-router.get('/', ensureAuth, (req, res) => {
-    Story.find({ status: 'public' }).lean()
-        .populate('user')
-        .sort({ date: 'desc' })
-        .then((fragrance) => {
-            res.render('index', {
-                fragrance
-            });
-    }).catch(err => console.log(err))
-});
-
+// Get all post
+router.get('/', ensureAuth, getAll);
 
 module.exports = router

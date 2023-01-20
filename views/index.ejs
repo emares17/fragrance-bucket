@@ -1,14 +1,14 @@
 <h1>Fragrance</h1>
 <div class="row">
     <% for(let i = 0; i < fragrance.length; i++) { %>
-        <div class="col s12 m4">
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-image">
                     <%= fragrance[i].user, user, fragrance[i]._id) %>
                 </div>
-                <div class="card-content canter-align">
-                    <h5><%= fragrance[i].title %></h5>
-                    <p><%= fragrance[i].body %></p>
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold"> <%= fragrance[i].title %></h5>
+                    <p class="card-text"> <%= fragrance[i].body %></p>
                     <br>
                     <div class="chip">
                         <img src="<%= stories[i].user.image %>" alt="">
@@ -17,14 +17,15 @@
                         </a>
                     </div>
                 </div>
-                <div class="card-action center-align">
-                    <a href="/fragrance/<%= fragrance[i]._id %>" class="btn grey">Read More</a>
+                <div class="card-footer">
+                    <a href="/fragrance/<%= fragrance[i]._id %>" class="btn btn-primary btn-block">Read More</a>
                 </div>
             </div>
         </div>
     <% } %>
     <% if(!stories.length) { %>
-        <p>No stories to display</p>
+        <p class="text-center">No stories to display</p>
     <% } %>
 </div>
+
 
