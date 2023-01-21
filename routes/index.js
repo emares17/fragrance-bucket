@@ -6,7 +6,7 @@ const { getHomePage, getDashboard } = require('../controllers/index')
 
 
 // Home page
-router.get('/', ensureAuth, getHomePage);
+router.get('/', getHomePage);
 
 // Dashboard
 router.get('/dashboard', ensureAuth, getDashboard)
