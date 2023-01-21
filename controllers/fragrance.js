@@ -1,4 +1,4 @@
-const Fragrance = require('../models/Fragrance')
+const Fragrance = require('../models/Fragrance');
 
 // Add Page
 exports.addPage = async (req, res) => {
