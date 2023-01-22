@@ -1,7 +1,7 @@
 const Fragrance = require('../models/Fragrance');
 
 // Get home page
-exports.getHomePage = async (req, res) => {
+exports.getHomePage = async(req, res) => {
     try {
         res.render('home');
     } catch (err) {
@@ -10,7 +10,7 @@ exports.getHomePage = async (req, res) => {
 };
 
 // Get Dashboard
-exports.getDashboard = async (req, res) => {
+exports.getDashboard = async(req, res) => {
     try {
         const fragrance = await Fragrance.find({ user: req.user.id }).lean();
         res.render('dashboard', {
