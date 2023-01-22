@@ -3,8 +3,6 @@ const router = express.Router();
 const { ensureAuth } = require('../middleware/auth');
 const { getHomePage, getDashboard } = require('../controllers/index')
 
-
-
 // Home page
 router.get('/', getHomePage);
 

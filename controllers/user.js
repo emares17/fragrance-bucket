@@ -68,14 +68,20 @@ exports.login = async(req, res, next) => {
 // Logout
 exports.logout = async(req, res) => {
     try {
-        await new Promise((resolve, reject) => {
-            req.logout((error) => {
-                if (error) return reject(error);
-                resolve();
+        if (req.isAuthenticated()) {
+            await new Promise((resolve, reject) => {
+                req.logout((error) => {
+                    if (error) return reject(error);
+                    resolve();
+                });
             });
-        });
-        req.flash('success', "You have successfully logged out");
-        res.redirect('/users/login');
+            req.flash('success', "You have successfully logged out");
+            res.redirect('/users/login');
+        } 
+        else {
+            req.flash('error', "You are not logged in");
+            res.redirect('/users/login');
+        }
     } catch (err) {
         console.error(err);
         res.redirect('/users/login');
