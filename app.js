@@ -21,6 +21,7 @@ connectDB();
 // EJS
 app.use(expressLayouts);
 app.set('view engine', 'EJS');
+app.use(express.static('public'));
 
 
 // Bodyparser
