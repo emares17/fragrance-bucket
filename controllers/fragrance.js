@@ -20,6 +20,21 @@ exports.createPost = async(req, res) => {
     }
 };
 
+// Delete Post
+exports.deletePost = async(req, res) => {
+    try {
+        const fragrance = await Fragrance.findById(req.params.id).lean();
+        if (fragrance.user != req.user.id) {
+            res.redirect('/dashboard')
+          } else {
+            await Fragrance.remove({ _id: req.params.id })
+            res.redirect('/dashboard')
+          }
+    } catch (err) {
+        console.error(err)
+    }
+};
+
 // Show All
 exports.getAll = async(req, res) => {
     try {
