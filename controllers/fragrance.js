@@ -27,7 +27,7 @@ exports.deletePost = async(req, res) => {
         if (fragrance.user != req.user.id) {
             res.redirect('/dashboard')
           } else {
-            await Fragrance.remove({ _id: req.params.id })
+            await Fragrance.deleteOne({ _id: req.params.id })
             res.redirect('/dashboard')
           }
     } catch (err) {
