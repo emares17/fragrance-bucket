@@ -65,6 +65,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/', require('./routes/index.js'));
 app.use('/users', require('./routes/user.js'));
+app.use('/oauth', require('./routes/oauth.js'));
 app.use('/fragrance', require('./routes/fragrance.js'));
 
 app.listen(PORT, console.log(`Server has started on port ${PORT}`));
