@@ -87,3 +87,23 @@ exports.logout = async(req, res) => {
         res.redirect('/users/login');
     }
 };
+
+// Below are the GoogleOAuth controllers
+
+exports.oAuth = async(req, res, next) => {
+    try {
+        passport.authenticate('google', { scope: ['profile'] })(req, res, next);
+    } catch (err) {
+        console.error(err)
+    }
+};
+
+exports.oAuthCallback = async(req, res) => {
+    try {
+        await passport.authenticate('google', { failureRedirect: '/users/login' });
+        res.redirect('/dashboard');
+    } catch (err) {
+        console.error(err);
+        res.redirect('/users/login');
+    }
+};
