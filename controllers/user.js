@@ -90,20 +90,47 @@ exports.logout = async(req, res) => {
 
 // Below are the GoogleOAuth controllers
 
-exports.oAuth = async(req, res, next) => {
-    try {
-        passport.authenticate('google', { scope: ['profile'] })(req, res, next);
-    } catch (err) {
-        console.error(err)
-    }
-};
+// exports.oAuth = async(req, res, next) => {
+//     try {
+//         passport.authenticate('google', { scope: ['profile'] })(req, res, next);
+//     } catch (err) {
+//         console.error(err)
+//     }
+// };
 
-exports.oAuthCallback = async(req, res) => {
-    try {
-        await passport.authenticate('google', { failureRedirect: '/users/login' });
-        res.redirect('/dashboard');
-    } catch (err) {
+// exports.oAuthCallback = async(req, res) => {
+//     try {
+//         await passport.authenticate('google', { failureRedirect: '/users/login' });
+//         res.redirect('/dashboard');
+//     } catch (err) {
+//         console.error(err);
+//         res.redirect('/users/login');
+//     }
+// };
+
+exports.oAuth = (req, res, next) => {
+    passport.authenticate('google', { scope: ['profile', 'email'] })(req, res, next);
+  };
+
+exports.oAuthCallback = (req, res, next) => {
+    passport.authenticate('google', (err, user) => {
+      if (err) {
         console.error(err);
-        res.redirect('/users/login');
-    }
-};
+        return res.redirect('/users/login');
+      }
+  
+      if (!user) {
+        return res.redirect('/users/login');
+      }
+  
+      req.logIn(user, (err) => {
+        if (err) {
+          console.error(err);
+          return res.redirect('/users/login');
+        }
+  
+        res.redirect('/dashboard');
+      });
+    })(req, res, next);
+  };
+  
