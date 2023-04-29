@@ -1,15 +1,12 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const { tryCatch } = require('../utils/tryCatch')
 
 // Login
-exports.getLoginPage = async(req, res) => {
-    try {
-        res.render('login');
-    } catch (err) {
-        console.error(err);
-    }
-};
+exports.getLoginPage = tryCatch(async(req, res) => {
+    throw new Error('This is a test error');
+});
 
 // Register
 exports.getRegisterPage = async(req, res) => {
@@ -33,12 +30,14 @@ exports.registerHandle = async(req, res) => {
             email: req.body.email,
             password: req.body.password
         });
+
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(newUser.password, salt);
         newUser.password = hash;
         await newUser.save();
         req.flash('success', 'You have successfully registered!');
         res.redirect('/users/login');
+
     } catch (err) {
         console.error(err);
         res.render('register', {
@@ -87,26 +86,6 @@ exports.logout = async(req, res) => {
         res.redirect('/users/login');
     }
 };
-
-// Below are the GoogleOAuth controllers
-
-// exports.oAuth = async(req, res, next) => {
-//     try {
-//         passport.authenticate('google', { scope: ['profile'] })(req, res, next);
-//     } catch (err) {
-//         console.error(err)
-//     }
-// };
-
-// exports.oAuthCallback = async(req, res) => {
-//     try {
-//         await passport.authenticate('google', { failureRedirect: '/users/login' });
-//         res.redirect('/dashboard');
-//     } catch (err) {
-//         console.error(err);
-//         res.redirect('/users/login');
-//     }
-// };
 
 exports.oAuth = (req, res, next) => {
     passport.authenticate('google', { scope: ['profile', 'email'] })(req, res, next);

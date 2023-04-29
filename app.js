@@ -9,6 +9,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const methodOverride = require('method-override');
+const errorHandler = require('./middleware/errorHandler');
 
 mongoose.set('strictQuery', true);
 
@@ -52,6 +53,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Error Handler
+app.use(errorHandler);
+
 // Flash
 app.use(flash());
 
@@ -67,5 +71,8 @@ app.use('/', require('./routes/index.js'));
 app.use('/users', require('./routes/user.js'));
 app.use('/oauth', require('./routes/oauth.js'));
 app.use('/fragrance', require('./routes/fragrance.js'));
+
+// Error Handler
+app.use(errorHandler);
 
 app.listen(PORT, console.log(`Server has started on port ${PORT}`));
