@@ -2,68 +2,65 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const { tryCatch } = require('../utils/tryCatch')
+const { AppError, ErrorHandler, HttpStatusCode } = require('../middleware/errorHandler');
 
 // Login
 exports.getLoginPage = tryCatch(async(req, res) => {
-    throw new Error('This is a test error');
+    res.render('login');
 });
 
 // Register
-exports.getRegisterPage = async(req, res) => {
-    try {
-        res.render('register');
-    } catch (err) {
-        console.error(err)
-    }
-};
+exports.getRegisterPage = tryCatch(async(req, res) => {
+    res.render('register');
+});
 
 // Register Handle
-exports.registerHandle = async(req, res) => {
+exports.registerHandle = tryCatch(async(req, res, next) => {
     try {
-        // Check if email is already registered
-        const user = await User.findOne({ email: req.body.email });
-        if (user) {
-            throw new Error('Email is already registered to a user');
-        }
-        const newUser = new User({
-            name: req.body.name,
-            email: req.body.email,
-            password: req.body.password
-        });
-
-        const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(newUser.password, salt);
-        newUser.password = hash;
-        await newUser.save();
-        req.flash('success', 'You have successfully registered!');
-        res.redirect('/users/login');
-
+      const user = await User.findOne({ email: req.body.email });
+      if (user) {
+        throw new AppError('Email is already registered to a user', HttpStatusCode.CONFLICT);
+      }
+  
+      const newUser = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password
+      });
+  
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(newUser.password, salt);
+      newUser.password = hash;
+      await newUser.save();
+  
+      req.flash('success', 'You have successfully registered!');
+      res.redirect('/users/login');
     } catch (err) {
-        console.error(err);
-        res.render('register', {
-            errors: [{ msg: err.message }],
-            name: req.body.name,
-            email: req.body.email,
-            password: req.body.password,
-            password2: req.body.password2
-        });
+      const message = err.message || 'Something went wrong';
+      const status = err.statusCode || HttpStatusCode.INTERNAL_SERVER_ERROR;
+      res.status(status).render('register', {
+        errors: [{ msg: message }],
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        password2: req.body.password2
+      });
     }
-};
+  });
 
 // Login
 exports.login = async(req, res, next) => {
-    try {
-        const auth = await passport.authenticate('local', {
-            successRedirect: '/dashboard',
-            failureRedirect: '/users/login',
-            failureFlash: true
-        }) (req, res, next);
-    } catch (err) {
-        console.error(err);
-        res.redirect('/users/login');
-    }
+    const auth = await passport.authenticate('local', {
+        successRedirect: '/dashboard',
+        failureRedirect: '/users/login',
+        failureFlash: true
+    }) (req, res, (err) => {
+        if (err) {
+            next(new AppError('Failed to authenicate user', HttpStatusCode.UNAUTHORIZED));
+        } 
+    })
 };
-
+  
 // Logout
 exports.logout = async(req, res) => {
     try {
@@ -83,7 +80,13 @@ exports.logout = async(req, res) => {
         }
     } catch (err) {
         console.error(err);
-        res.redirect('/users/login');
+
+        let statusCode = HttpStatusCode.INTERNAL_SERVER;
+        if (err instanceof AppError) {
+            statusCode = err.statusCode;
+        }
+        
+        res.status(statusCode).redirect('/users/login');
     }
 };
 
